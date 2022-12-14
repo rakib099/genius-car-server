@@ -35,6 +35,7 @@ async function run() {
             res.send(service);
         });
 
+        // orders api
         app.get('/orders', async (req, res) => {
             let query = {};
             if (req.query.email) {
@@ -47,10 +48,31 @@ async function run() {
             res.send(orders);
         });
 
-        // orders api
         app.post('/orders', async (req, res) => {
             const order = req.body;
             const result = await orderCollection.insertOne(order);
+            console.log(result);
+            res.send(result);
+        });
+
+        app.patch('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const order = req.body;
+            const status = req.body.status;
+            const filter = {_id: ObjectId(id)};
+            const updatedDoc = {
+                $set: {
+                    status: status
+                }
+            }
+            const result = await orderCollection.updateOne(filter, updatedDoc);
+            res.send(result);
+        });
+
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await orderCollection.deleteOne(query);
             console.log(result);
             res.send(result);
         });
