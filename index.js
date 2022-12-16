@@ -62,7 +62,7 @@ async function run() {
         // orders api
         app.get('/orders', verifyJWT, async (req, res) => {
             const decoded = req.decoded;
-            console.log('inside orders api', decoded);
+            // console.log('inside orders api', decoded);
             if (decoded.email !== req.query.email) {
                 return res.status(403).send({message: "forbidden access"});
             }
