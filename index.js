@@ -53,8 +53,17 @@ async function run() {
             // const query = {price: {$ne: 150}};
             // const query = {price: {$in: [20, 40, 150]}};
             // const query = {price: {$nin: [20, 40, 150]}};
-            const query = {$and: [{price: {$gt: 20}}, {price: {$gt: 100}}]};
-            // const query = {};
+            // const query = {$and: [{price: {$gt: 20}}, {price: {$gt: 100}}]};
+            const search = req.query.search;
+            let query = {};
+            if (search.length) {
+                query = {
+                    $text: {
+                        $search: search
+                    }
+                }
+            }
+            console.log(search);
             const order = req.query.order === 'asc' ? 1 : -1;
             const cursor = serviceCollection.find(query).sort({price: order});
             const services = await cursor.toArray();
